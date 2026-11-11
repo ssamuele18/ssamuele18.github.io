@@ -7,9 +7,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <div class="wide">
     <div class="page-head">
       <h1>Projects</h1>
-      <p>Things I built, broke and learned from. Add new ones in <code>src/config.ts</code>.</p>
+      <p>Things I built, broke and learned from.</p>
     </div>
-    <div class="grid" style="padding-bottom:90px">
+    <div class="grid">
       {PROJECTS.map((p) => (
         <a class="card reveal" href={`${base}${p.href}`} style="color:inherit">
           <h3>{p.title}</h3>

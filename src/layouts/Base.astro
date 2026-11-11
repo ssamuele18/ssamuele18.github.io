@@ -8,6 +8,7 @@ interface Props { title?: string; description?: string; favicon?: string; }
 const { title, description = SITE.tagline, favicon } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname;
+const isHome = path === `${base}/` || path === base;
 const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
 const nav = [
   { href: `${base}/`, label: 'Home', match: (p: string) => p === `${base}/` || p === base },
@@ -62,7 +63,7 @@ const nav = [
       </div>
     </header>
 
-    <main><slot /></main>
+    <main class={isHome ? undefined : "page"}><slot /></main>
 
     <footer>
       <div class="wide">
