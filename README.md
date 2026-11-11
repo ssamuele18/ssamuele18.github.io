@@ -29,6 +29,6 @@ npm run dev        # http://localhost:4321
 Se la repo ha un nome diverso da `USERNAME.github.io`, in `astro.config.mjs` imposta `base: '/nome-repo'`.
 
 ## Idee per la fase 2
-- Cambiare l'hero canvas (`src/components/HeroCanvas.astro`): superficie di loss, regressione che si adatta, ecc.
+- Cambiare l'sfondo (`src/components/RegressionBackground.astro`): regressione che si adatta con lo scroll
 - Colori e font in `src/styles/global.css` (variabili in `:root`)
 - Dominio personalizzato (unica cosa a pagamento, facoltativa)

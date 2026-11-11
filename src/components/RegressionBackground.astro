@@ -1,0 +1,172 @@
+---
+// Sfondo fisso: uno scatter di dati rumorosi e una regressione (basi RBF) che
+// si adatta con la discesa del gradiente man mano che l'utente scorre la pagina.
+// Lo scroll (0 → 1) è mappato sui passi di training su scala logaritmica,
+// così all'inizio la curva cambia molto e poi rifinisce i dettagli.
+---
+<canvas id="reg-bg" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.getElementById('reg-bg') as HTMLCanvasElement | null;
+  if (canvas) {
+    const ctx = canvas.getContext('2d')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- Dati (seed fisso: stesso dataset a ogni visita) ---
+    function mulberry32(a: number) {
+      return () => {
+        a |= 0; a = (a + 0x6d2b79f5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    const rand = mulberry32(18);
+    const gauss = () => Math.sqrt(-2 * Math.log(rand() + 1e-12)) * Math.cos(2 * Math.PI * rand());
+    const truth = (x: number) => 0.5 + 0.22 * Math.sin(2 * Math.PI * 1.25 * x + 0.5) + 0.12 * (x - 0.5);
+
+    const N = 90;
+    const X: number[] = [], Y: number[] = [];
+    for (let i = 0; i < N; i++) {
+      const x = 0.02 + 0.96 * rand();
+      X.push(x);
+      Y.push(truth(x) + 0.065 * gauss());
+    }
+
+    // --- Basi: bias + gaussiane equispaziate ---
+    const K = 9, width = 0.11;
+    const centers = Array.from({ length: K }, (_, k) => k / (K - 1));
+    const feats = (x: number) => [1, ...centers.map((c) => Math.exp(-((x - c) ** 2) / (2 * width * width)))];
+    const Phi = X.map(feats);
+    const D = K + 1;
+
+    // Passo = 1/L, con L stimato via power iteration su Φᵀ Φ / N
+    const gram = (v: number[]) => {
+      const r = Phi.map((f) => f.reduce((s, fj, j) => s + fj * v[j], 0));
+      return Array.from({ length: D }, (_, j) => Phi.reduce((s, f, i) => s + f[j] * r[i], 0) / N);
+    };
+    let v = Array(D).fill(1);
+    for (let it = 0; it < 50; it++) {
+      const g = gram(v);
+      const n = Math.hypot(...g);
+      v = g.map((x) => x / n);
+    }
+    const L = Math.hypot(...gram(v));
+    const lr = 1 / L, ridge = 1e-4;
+
+    // --- Discesa del gradiente, salvando snapshot su scala logaritmica ---
+    const T = 6000, S = 260;
+    const snapAt = new Map<number, number>();
+    for (let s = 0; s < S; s++) snapAt.set(Math.round(Math.pow(T + 1, s / (S - 1)) - 1), s);
+    const snaps: { step: number; w: number[]; loss: number }[] = [];
+    let w = Array(D).fill(0);
+    w[0] = 0.12; // inizializzazione volutamente sbagliata: retta piatta in basso
+    for (let t = 0; t <= T; t++) {
+      const res = Phi.map((f, i) => f.reduce((s, fj, j) => s + fj * w[j], 0) - Y[i]);
+      if (snapAt.has(t)) {
+        snaps.push({ step: t, w: w.slice(), loss: res.reduce((s, r) => s + r * r, 0) / N });
+      }
+      const grad = Array.from({ length: D }, (_, j) => Phi.reduce((s, f, i) => s + f[j] * res[i], 0) / N + ridge * w[j]);
+      w = w.map((wj, j) => wj - lr * grad[j]);
+    }
+
+    // --- Rendering ---
+    let W = 0, H = 0;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let target = 0, cur = 0, raf = 0;
+
+    const sx = (x: number) => x * W;
+    const sy = (y: number) => H * (0.9 - 0.75 * y);
+
+    function progress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      return max > 4 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
+    }
+
+    function state(p: number) {
+      const f = p * (snaps.length - 1);
+      const i = Math.min(snaps.length - 2, Math.floor(f));
+      const a = snaps[i], b = snaps[i + 1], u = f - i;
+      return {
+        w: a.w.map((x, j) => x + (b.w[j] - x) * u),
+        step: Math.round(a.step + (b.step - a.step) * u),
+        loss: a.loss + (b.loss - a.loss) * u,
+      };
+    }
+    const predict = (wt: number[], x: number) => feats(x).reduce((s, fj, j) => s + fj * wt[j], 0);
+
+    function draw() {
+      const { w: wt, step, loss } = state(cur);
+      ctx.clearRect(0, 0, W, H);
+
+      // residui
+      ctx.strokeStyle = 'rgba(39,245,216,0.07)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 0; i < N; i++) {
+        ctx.moveTo(sx(X[i]), sy(Y[i]));
+        ctx.lineTo(sx(X[i]), sy(predict(wt, X[i])));
+      }
+      ctx.stroke();
+
+      // punti
+      ctx.fillStyle = 'rgba(128,151,171,0.38)';
+      for (let i = 0; i < N; i++) {
+        ctx.beginPath(); ctx.arc(sx(X[i]), sy(Y[i]), 2.3, 0, Math.PI * 2); ctx.fill();
+      }
+
+      // curva stimata
+      ctx.strokeStyle = 'rgba(39,245,216,0.5)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const M = 180;
+      for (let k = 0; k <= M; k++) {
+        const x = k / M, X0 = sx(x), Y0 = sy(predict(wt, x));
+        k ? ctx.lineTo(X0, Y0) : ctx.moveTo(X0, Y0);
+      }
+      ctx.stroke();
+
+      // etichetta discreta
+      ctx.fillStyle = 'rgba(128,151,171,0.45)';
+      ctx.font = '11px ui-monospace, Menlo, Consolas, monospace';
+      ctx.fillText(`step ${step.toLocaleString('en')} · mse ${loss.toFixed(4)}`, 16, H - 16);
+    }
+
+    function tick() {
+      cur += (target - cur) * 0.12;
+      if (Math.abs(target - cur) < 0.0005) cur = target;
+      draw();
+      raf = cur !== target ? requestAnimationFrame(tick) : 0;
+    }
+
+    function update() {
+      target = progress();
+      if (reduce) { cur = target; draw(); return; }
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+
+    function resize() {
+      W = window.innerWidth; H = window.innerHeight;
+      canvas!.width = W * dpr; canvas!.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+      update();
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', resize);
+    cur = target = progress();
+    resize();
+  }
+</script>
+
+<style>
+  #reg-bg {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+</style>

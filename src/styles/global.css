@@ -40,14 +40,12 @@ code, pre { font-family: var(--mono); }
 }
 .nav .wide { display: flex; align-items: center; justify-content: space-between; height: 58px; }
 .brand { font-family: var(--mono); font-weight: 700; color: var(--text); display: flex; gap: 8px; align-items: center; }
-.brand .lambda { color: var(--neon); text-shadow: var(--glow); font-size: 1.3rem; }
 .nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 0.9rem; }
 .nav a { color: var(--muted); }
 .nav a:hover, .nav a[aria-current='page'] { color: var(--neon); text-decoration: none; }
 
 /* HERO */
 .hero { position: relative; min-height: calc(100vh - 58px); display: grid; align-items: center; overflow: hidden; }
-.hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero-inner { position: relative; z-index: 2; pointer-events: none; }
 .hero-inner a, .hero-inner button { pointer-events: auto; }
 .eyebrow { font-family: var(--mono); color: var(--neon); font-size: 0.9rem; letter-spacing: 0.12em; text-transform: uppercase; }
@@ -67,7 +65,6 @@ code, pre { font-family: var(--mono); }
 /* SECTIONS */
 section.block { padding: 90px 0; border-top: 1px solid var(--line); }
 section.block h2 { font-size: 1.6rem; margin: 0 0 24px; }
-section.block h2::before { content: 'λ '; color: var(--neon); }
 .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 .card {
   background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px;

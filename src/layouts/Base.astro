@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import 'katex/dist/katex.min.css';
 import { SITE } from '../config';
+import RegressionBackground from '../components/RegressionBackground.astro';
 
 interface Props { title?: string; description?: string; }
 const { title, description = SITE.tagline } = Astro.props;
@@ -25,9 +26,10 @@ const nav = [
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
   </head>
   <body>
+    <RegressionBackground />
     <header class="nav">
       <div class="wide">
-        <a class="brand" href={`${base}/`}><span class="lambda">λ</span>{SITE.name}</a>
+        <a class="brand" href={`${base}/`}>{SITE.name}</a>
         <nav>
           <ul>
             {nav.map((n) => (
