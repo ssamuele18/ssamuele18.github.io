@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const entries = (await getCollection('tlr', (e) => !e.data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+// Raggruppa per trimestre ("Q3 2026"), dal più recente al più vecchio
+const groups = new Map<string, typeof entries>();
+for (const e of entries) {
+  const d = e.data.date;
+  const key = `Q${Math.floor(d.getUTCMonth() / 3) + 1} ${d.getUTCFullYear()}`;
+  groups.set(key, [...(groups.get(key) ?? []), e]);
+}
+---
+<Base title="The Learning Rate">
+  <div class="wrap">
+    <div class="page-head">
+      <h1>The Learning Rate</h1>
+    </div>
+
+    <div class="tlr-welcome">
+      <span class="lambda">λ</span> – Welcome to TLR!
+    </div>
+    <p>
+      A collection of things we learned, loved, and couldn't stop thinking about — statistics, machine learning,
+      deep learning, and all the ideas that don't always fit into a 9-to-5.
+    </p>
+    <p>
+      We're not here to write another textbook. We're here for the moments that made something click: a proof that
+      finally made sense, a model that surprised us, a paper we couldn't put down.
+    </p>
+    <p>Pick a topic below and start wherever curiosity takes you.</p>
+    <hr style="border:0;border-top:1px solid var(--line);margin:28px 0 10px" />
+
+    {[...groups.entries()].map(([quarter, items], i) => (
+      <details class="quarter" open={i === 0}>
+        <summary>{quarter} <span class="count">({items.length})</span></summary>
+        <ul class="entries">
+          {items.map((e) => (
+            <li>
+              <a href={`${base}/tlr/${e.id}`}>{e.data.title}</a>
+              <div class="date">{e.data.date.toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })}</div>
+              <p class="abs">{e.data.abstract}</p>
+              {e.data.tags.map((t) => <span class="tag">{t}</span>)}
+            </li>
+          ))}
+        </ul>
+      </details>
+    ))}
+
+    <p style="margin:40px 0 90px;font-family:var(--mono);font-size:0.9rem">
+      ⓘ <a href={`${base}/tlr/about`}>About TLR</a>
+    </p>
+  </div>
+</Base>

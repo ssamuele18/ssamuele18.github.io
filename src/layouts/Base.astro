@@ -1,0 +1,71 @@
+---
+import '../styles/global.css';
+import 'katex/dist/katex.min.css';
+import { SITE } from '../config';
+
+interface Props { title?: string; description?: string; }
+const { title, description = SITE.tagline } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname;
+const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
+const nav = [
+  { href: `${base}/`, label: 'Home', match: (p: string) => p === `${base}/` || p === base },
+  { href: `${base}/cv`, label: 'CV', match: (p: string) => p.startsWith(`${base}/cv`) },
+  { href: `${base}/projects`, label: 'Projects', match: (p: string) => p.startsWith(`${base}/projects`) },
+  { href: `${base}/tlr`, label: 'TLR', match: (p: string) => p.startsWith(`${base}/tlr`) },
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="wide">
+        <a class="brand" href={`${base}/`}><span class="lambda">λ</span>{SITE.name}</a>
+        <nav>
+          <ul>
+            {nav.map((n) => (
+              <li><a href={n.href} aria-current={n.match(path) ? 'page' : undefined}>{n.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer>
+      <div class="wide">
+        <span>© {new Date().getFullYear()} {SITE.name}</span>
+        <span>
+          {SITE.links.map((l) => <a href={l.href} rel="noopener">{l.label}</a>)}
+        </span>
+      </div>
+    </footer>
+
+    <script>
+      // Scroll reveal: gli elementi con classe .reveal compaiono mentre scorri
+      const els = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+          }),
+          { threshold: 0.12 }
+        );
+        els.forEach((el, i) => {
+          (el as HTMLElement).style.transitionDelay = `${(i % 4) * 80}ms`;
+          io.observe(el);
+        });
+      } else {
+        els.forEach((el) => el.classList.add('in'));
+      }
+    </script>
+  </body>
+</html>

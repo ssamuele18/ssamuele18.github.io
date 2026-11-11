@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('tlr', (e) => !e.data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const d = entry.data;
+---
+<Base title={d.title} description={d.abstract}>
+  <article class="post wrap">
+    <p><a href={`${base}/tlr`}>← The Learning Rate</a></p>
+    <h1>{d.title}</h1>
+    {d.subtitle && <div class="sub">{d.subtitle}</div>}
+    <div class="meta" style="font-family:var(--mono);color:var(--muted);font-size:0.85rem">
+      {d.date.toLocaleDateString('en', { month: 'long', year: 'numeric', timeZone: 'UTC' })}
+      {d.author && <> · {d.author}</>}
+    </div>
+    <div>{d.tags.map((t) => <span class="tag">{t}</span>)}</div>
+    <div class="abstract"><strong>Abstract.</strong> {d.abstract}</div>
+    <Content />
+  </article>
+</Base>

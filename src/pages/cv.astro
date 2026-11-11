@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { CV } from '../config';
+---
+<Base title="CV">
+  <div class="wrap">
+    <div class="page-head">
+      <h1>Curriculum Vitae</h1>
+      <p>{CV.summary}</p>
+      <div class="btns"><a class="btn" href={CV.pdf}>Download PDF</a></div>
+    </div>
+
+    <section class="block">
+      <h2 class="reveal">Experience</h2>
+      {CV.experience.map((x) => (
+        <div class="cv-item reveal">
+          <h3>{x.role} · {x.org}</h3>
+          <div class="meta">{x.when}</div>
+          <ul>{x.points.map((p) => <li>{p}</li>)}</ul>
+        </div>
+      ))}
+    </section>
+
+    <section class="block">
+      <h2 class="reveal">Education</h2>
+      {CV.education.map((x) => (
+        <div class="cv-item reveal">
+          <h3>{x.title} · {x.org}</h3>
+          <div class="meta">{x.when}</div>
+          {x.note && <p style="color:var(--muted);margin:6px 0 0">{x.note}</p>}
+        </div>
+      ))}
+    </section>
+
+    <section class="block">
+      <h2 class="reveal">Skills</h2>
+      {CV.skills.map((s) => (
+        <div class="reveal" style="margin-bottom:14px">
+          <strong style="font-family:var(--mono)">{s.group}</strong><br />
+          {s.items.map((i) => <span class="tag">{i}</span>)}
+        </div>
+      ))}
+    </section>
+  </div>
+</Base>

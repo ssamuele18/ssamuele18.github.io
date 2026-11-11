@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base title="About TLR">
+  <article class="post wrap">
+    <p><a href={`${base}/tlr`}>← The Learning Rate</a></p>
+    <h1>Why TLR?</h1>
+    <p>
+      Most of what we learned in school never made it into a job description. The proofs, the models, the late nights
+      chasing a bug that turned out to be a sign error — that stuff doesn't show up in a sprint board.
+    </p>
+    <p>
+      TLR started because we didn't want it to just... disappear. It's a place to keep explaining things the way we
+      wish someone had explained them to us — and, slowly, to make room for whoever else wants to do the same.
+    </p>
+  </article>
+</Base>
