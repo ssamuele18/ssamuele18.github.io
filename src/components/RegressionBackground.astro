@@ -14,7 +14,6 @@
   if (canvas) {
     const ctx = canvas.getContext('2d')!;
     const reduceMq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const darkMq = window.matchMedia('(prefers-color-scheme: dark)');
 
     // ---------- Utilità ----------
     function mulberry32(a: number) {
@@ -28,20 +27,20 @@
     const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 
     // ---------- Palette (chiaro / scuro) ----------
-    type Pal = { facets: string[]; edge: string; thread: string; node: string; point: string; resid: string; curve: string; label: string; facetAlpha: number };
+    type Pal = { facets: string[]; edge: string; thread: string; node: string; point: string; resid: string; curve: string; glow: string; label: string; facetAlpha: number };
     const LIGHT: Pal = {
       facets: ['#d9825f', '#e2672e', '#9dbfae', '#2f6b5a', '#d6ad5c', '#efe2cf', '#c96f4a'],
       edge: 'rgba(255,255,255,0.7)', thread: 'rgba(23,48,42,0.22)', node: 'rgba(160,120,50,0.8)',
-      point: 'rgba(23,48,42,0.38)', resid: 'rgba(23,48,42,0.11)', curve: '#c4521f', label: 'rgba(23,48,42,0.5)',
+      point: 'rgba(23,48,42,0.38)', resid: 'rgba(23,48,42,0.11)', curve: '#ff5a1f', glow: 'rgba(255,90,31,0.55)', label: 'rgba(23,48,42,0.5)',
       facetAlpha: 1,
     };
     const DARK: Pal = {
       facets: ['#b8613f', '#e2672e', '#5f8f7c', '#1f4a3e', '#c9962f', '#3a5a4f', '#8a4a32'],
       edge: 'rgba(255,255,255,0.18)', thread: 'rgba(236,227,212,0.18)', node: 'rgba(224,180,90,0.8)',
-      point: 'rgba(236,227,212,0.42)', resid: 'rgba(236,227,212,0.11)', curve: '#f08a55', label: 'rgba(236,227,212,0.45)',
+      point: 'rgba(236,227,212,0.42)', resid: 'rgba(236,227,212,0.11)', curve: '#f08a55', glow: 'rgba(240,138,85,0.35)', label: 'rgba(236,227,212,0.45)',
       facetAlpha: 0.75,
     };
-    const pal = () => (darkMq.matches ? DARK : LIGHT);
+    const pal = () => (document.documentElement.getAttribute('data-theme') === 'dark' ? DARK : LIGHT);
 
     // ---------- Composizione geometrica (seed fisso) ----------
     const g = mulberry32(1863);
@@ -214,10 +213,13 @@
       ctx.fillStyle = P.point;
       for (let i = 0; i < N; i++) { ctx.beginPath(); ctx.arc(sx(X[i]), sy(Y[i]), 2.4, 0, Math.PI * 2); ctx.fill(); }
 
+      ctx.save();
+      ctx.shadowColor = P.glow; ctx.shadowBlur = 14;
       ctx.strokeStyle = P.curve; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
       ctx.beginPath();
       PhiGrid.forEach((f, k) => { const x = sx(k / GRID), y = sy(dot(f, wt)); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
       ctx.stroke();
+      ctx.restore();
 
       ctx.fillStyle = P.label;
       ctx.font = '11px "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace';
@@ -247,7 +249,7 @@
 
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', resize);
-    darkMq.addEventListener('change', draw);
+    window.addEventListener('themechange', draw);
     cur = target = progress();
     resize();
   }

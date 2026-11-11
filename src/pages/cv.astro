@@ -1,13 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import { CV } from '../config';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Base title="CV">
   <div class="wrap">
     <div class="page-head">
       <h1>Curriculum Vitae</h1>
+      <p class="cv-loc">{CV.location}</p>
       <p>{CV.summary}</p>
-      <div class="btns"><a class="btn" href={CV.pdf}>Download PDF</a></div>
+      <div class="btns"><a class="btn solid" href={`${base}${CV.pdf}`} download>Download PDF</a></div>
     </div>
 
     <section class="block">
@@ -15,8 +17,9 @@ import { CV } from '../config';
       {CV.experience.map((x) => (
         <div class="cv-item reveal">
           <h3>{x.role} · {x.org}</h3>
-          <div class="meta">{x.when}</div>
+          <div class="meta">{x.when} · {x.where}</div>
           <ul>{x.points.map((p) => <li>{p}</li>)}</ul>
+          <div>{x.tools.map((t) => <span class="tag">{t}</span>)}</div>
         </div>
       ))}
     </section>
@@ -25,9 +28,24 @@ import { CV } from '../config';
       <h2 class="reveal">Education</h2>
       {CV.education.map((x) => (
         <div class="cv-item reveal">
-          <h3>{x.title} · {x.org}</h3>
-          <div class="meta">{x.when}</div>
-          {x.note && <p style="color:var(--muted);margin:6px 0 0">{x.note}</p>}
+          <h3>{x.title}</h3>
+          <div class="meta">{x.org} · {x.when}</div>
+          {x.note && <p class="cv-note">{x.note}</p>}
+        </div>
+      ))}
+      <div class="reveal cv-courses">
+        <strong>Relevant coursework</strong><br />
+        {CV.coursework.map((c) => <span class="tag">{c}</span>)}
+      </div>
+    </section>
+
+    <section class="block">
+      <h2 class="reveal">Projects</h2>
+      {CV.projects.map((p) => (
+        <div class="cv-item reveal">
+          <h3>{p.title}</h3>
+          <div class="meta">{p.when} · {p.kind}</div>
+          <p class="cv-note">{p.text}</p>
         </div>
       ))}
     </section>
@@ -35,11 +53,18 @@ import { CV } from '../config';
     <section class="block">
       <h2 class="reveal">Skills</h2>
       {CV.skills.map((s) => (
-        <div class="reveal" style="margin-bottom:14px">
-          <strong style="font-family:var(--mono)">{s.group}</strong><br />
+        <div class="reveal cv-skill">
+          <strong>{s.group}</strong><br />
           {s.items.map((i) => <span class="tag">{i}</span>)}
         </div>
       ))}
+    </section>
+
+    <section class="block">
+      <h2 class="reveal">Beyond work</h2>
+      <dl class="cv-extra reveal">
+        {CV.extra.map((e) => (<><dt>{e.label}</dt><dd>{e.text}</dd></>))}
+      </dl>
     </section>
   </div>
 </Base>
