@@ -6,7 +6,7 @@ export const SITE = {
     'I work with data for a living and for fun. Here you will find my CV, the projects I am proud of, and The Learning Rate, a place where I write about what made things click.',
   links: [
     { label: 'GitHub', href: 'https://github.com/ssamuele18?tab=repositories' },
-    { label: 'LinkedIn', href: 'www.linkedin.com/in/samuele-caldarini-086304232' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/samuele-caldarini-086304232' },
   ],
 };
 

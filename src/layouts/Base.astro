@@ -23,6 +23,11 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{pageTitle}</title>
+    <meta name="theme-color" content="#f2e9dc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c1c18" media="(prefers-color-scheme: dark)" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Manrope:wght@600;700;800&display=swap" />
     {favicon
       ? <link rel="icon" href={`${base}${favicon}`} type="image/png" />
       : <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />}
@@ -30,7 +35,7 @@ const nav = [
   <body>
     <RegressionBackground />
     <header class="nav">
-      <div class="wide">
+      <div class="nav-bar">
         <a class="brand" href={`${base}/`}>{SITE.name}</a>
         <nav>
           <ul>
@@ -54,6 +59,15 @@ const nav = [
     </footer>
 
     <script>
+      // Riflesso "liquid glass": la luce segue il puntatore sulle superfici di vetro
+      document.addEventListener("pointermove", (e) => {
+        const el = (e.target as Element | null)?.closest?.(".card, .btn, .nav-bar") as HTMLElement | null;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        el.style.setProperty("--my", `${e.clientY - r.top}px`);
+      }, { passive: true });
+
       // Scroll reveal: gli elementi con classe .reveal compaiono mentre scorri
       const els = document.querySelectorAll('.reveal');
       if ('IntersectionObserver' in window) {
