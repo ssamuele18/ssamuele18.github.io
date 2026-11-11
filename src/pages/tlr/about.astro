@@ -2,9 +2,9 @@
 import Base from '../../layouts/Base.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
-<Base title="About TLR">
+<Base title="About TLR" favicon="/tlr-logo-64.png">
   <article class="post wrap">
-    <p><a href={`${base}/tlr`}>← The Learning Rate</a></p>
+    <p><a class="tlr-back" href={`${base}/tlr`}>← <img src={`${base}/tlr-logo-64.png`} alt="" width="22" height="22" /> The Learning Rate</a></p>
     <h1>Why TLR?</h1>
     <p>
       Most of what we learned in school never made it into a job description. The proofs, the models, the late nights

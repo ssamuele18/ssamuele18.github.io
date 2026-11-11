@@ -92,7 +92,14 @@ section.block h2 { font-size: 1.6rem; margin: 0 0 24px; }
 .tlr-welcome {
   background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; font-family: var(--mono);
 }
-.tlr-welcome .lambda { color: var(--neon); }
+.tlr-welcome { display: flex; align-items: center; gap: 10px; }
+.tlr-welcome img { border-radius: 6px; }
+.tlr-welcome .lambda { color: var(--neon-2); text-shadow: 0 0 12px rgba(125,255,106,0.45); }
+.tlr-head { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.tlr-head img { border-radius: 16px; box-shadow: 0 0 28px rgba(125,255,106,0.25); }
+.tlr-head h1 { margin: 0; }
+.tlr-back { display: inline-flex; align-items: center; gap: 8px; }
+.tlr-back img { border-radius: 5px; }
 details.quarter { border-bottom: 1px solid var(--line); padding: 14px 0; }
 details.quarter summary { cursor: pointer; font-family: var(--mono); font-size: 1.25rem; font-weight: 700; list-style: none; display: flex; gap: 12px; align-items: center; }
 details.quarter summary::-webkit-details-marker { display: none; }

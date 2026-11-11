@@ -4,8 +4,8 @@ import 'katex/dist/katex.min.css';
 import { SITE } from '../config';
 import RegressionBackground from '../components/RegressionBackground.astro';
 
-interface Props { title?: string; description?: string; }
-const { title, description = SITE.tagline } = Astro.props;
+interface Props { title?: string; description?: string; favicon?: string; }
+const { title, description = SITE.tagline, favicon } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname;
 const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
@@ -23,7 +23,9 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{pageTitle}</title>
-    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    {favicon
+      ? <link rel="icon" href={`${base}${favicon}`} type="image/png" />
+      : <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />}
   </head>
   <body>
     <RegressionBackground />

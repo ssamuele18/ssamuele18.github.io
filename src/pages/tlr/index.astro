@@ -15,13 +15,15 @@ for (const e of entries) {
   groups.set(key, [...(groups.get(key) ?? []), e]);
 }
 ---
-<Base title="The Learning Rate">
+<Base title="The Learning Rate" favicon="/tlr-logo-64.png">
   <div class="wrap">
-    <div class="page-head">
+    <div class="page-head tlr-head">
+      <img src={`${base}/tlr-logo-256.png`} alt="The Learning Rate logo" width="88" height="88" />
       <h1>The Learning Rate</h1>
     </div>
 
     <div class="tlr-welcome">
+      <img src={`${base}/tlr-logo-64.png`} alt="" width="28" height="28" />
       <span class="lambda">λ</span> – Welcome to TLR!
     </div>
     <p>
