@@ -10,9 +10,15 @@ npm run dev        # http://localhost:4321
 ```
 
 ## Cosa cambiare per primo
-- `src/config.ts` → nome, tagline, link social, CV, progetti
+- `src/config.ts` → nome, tagline, link social, CV
 - `public/cv.pdf` → il tuo CV (il pulsante "Download PDF" punta qui)
 - `astro.config.mjs` → `site` con il tuo username GitHub
+
+## Aggiungere un progetto
+1. Copia `src/content/projects/_template.md` in `src/content/projects/nome-progetto.md`
+2. Compila titolo, summary, data, `kind` (University / Personal / Work), stack e tag; opzionali `repo`, `link` e `tlr` (slug di un articolo TLR collegato)
+3. Scrivi la descrizione in Markdown e togli la riga `draft: true`
+4. Il progetto compare in /projects (con filtro per tipo) e ha una sua pagina /projects/nome-progetto
 
 ## Scrivere un nuovo articolo TLR
 1. Copia `src/content/tlr/_template.md` in `src/content/tlr/nome-articolo.md`

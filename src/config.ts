@@ -98,15 +98,3 @@ export const CV = {
   ],
   pdf: '/cv.pdf',
 };
-
-export const PROJECTS = [
-  {
-    title: 'Where DL Fails',
-    subtitle: 'Survival analysis & geostatistics for interpretable house-pricing models',
-    when: 'Mar – Jun 2025',
-    summary:
-      'Starting from the Zillow Zestimate challenge, I traded accuracy for interpretability: Universal Kriging, Kaplan-Meier and Nelson-Aalen estimators, Survival Forests and Deep Survival Nets to understand why some homes sell faster than others.',
-    tags: ['Kriging', 'Survival analysis', 'Deep Survival Nets'],
-    href: '/tlr/where-dl-fails',
-  },
-];

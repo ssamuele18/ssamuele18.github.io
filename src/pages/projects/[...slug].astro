@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects', (p) => !p.data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const d = entry.data;
+const related = d.tlr ? await getEntry('tlr', d.tlr) : undefined;
+const article = related && !related.data.draft ? related : undefined;
+---
+<Base title={d.title} description={d.summary}>
+  <article class="post wrap">
+    <p><a href={`${base}/projects`}>← Projects</a></p>
+    <div class="project-top">
+      <span class={`kind kind-${d.kind.toLowerCase()}`}>{d.kind}</span>
+      <span class="meta">{d.date.toLocaleDateString('en', { month: 'long', year: 'numeric', timeZone: 'UTC' })}</span>
+    </div>
+    <h1>{d.title}</h1>
+    <div>{[...d.stack, ...d.tags].map((t) => <span class="tag">{t}</span>)}</div>
+    <div class="abstract"><strong>In short.</strong> {d.summary}</div>
+    {(d.repo || d.link) && (
+      <div class="btns" style="margin:0 0 30px">
+        {d.repo && <a class="btn" href={d.repo} rel="noopener">View code</a>}
+        {d.link && <a class="btn" href={d.link} rel="noopener">Open link</a>}
+      </div>
+    )}
+    <Content />
+    {article && (
+      <a class="card related" href={`${base}/tlr/${article.id}`} style="color:inherit">
+        <div class="meta">Related article on The Learning Rate</div>
+        <h3>{article.data.title}</h3>
+        <p>{article.data.abstract}</p>
+      </a>
+    )}
+  </article>
+</Base>
