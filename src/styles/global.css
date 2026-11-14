@@ -329,3 +329,9 @@ main.page section.block { padding: 36px 0 8px; }
 article.post .project-top { justify-content: flex-start; margin-top: 10px; }
 .card.related { margin-top: 48px; }
 .card.related .meta { margin-bottom: 4px; }
+
+/* ---------- ARTICOLI: tabelle e citazioni ---------- */
+article.post table { width: 100%; border-collapse: collapse; margin: 1.6em 0; font-size: 0.92rem; display: block; overflow-x: auto; }
+article.post th, article.post td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+article.post thead th { font-family: var(--display); font-weight: 600; border-bottom: 2px solid var(--line); background: var(--glass-bg); }
+article.post blockquote .katex-display { margin: 0.6em 0; }
