@@ -2,7 +2,7 @@
 title: "Where DL Fails"
 subtitle: "Survival analysis & geostatistics for interpretable house-pricing modelling"
 abstract: "A project built on top of Zillow's Zestimate challenge, but not really about beating Zestimate. I wanted to understand why it was wrong where it was wrong, and along the way I traded some accuracy for something I cared about more: being able to explain why some homes sell faster than others."
-date: 2025-06-15
+date: 2025-06-22
 tags: [Kriging, Survival analysis, Deep Survival Nets, Interpretability]
 ---
 

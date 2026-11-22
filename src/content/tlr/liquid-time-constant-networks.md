@@ -4,7 +4,7 @@ abstract: >-
   Liquid Time-Constant Networks are recurrent networks for data that evolves continuously in time. Instead
   of giving every hidden unit one fixed response speed, they let the data decide how quickly each unit
   updates: a learned, state-dependent time constant with stability built into the architecture.
-date: 2023-05-15
+date: 2023-05-17
 tags: [Deep Learning, Model Training, ODEs, Computational Cost]
 ---
 

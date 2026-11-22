@@ -5,7 +5,7 @@ abstract: >-
   Diffusion models generate images, videos, music and memes, but the theory behind them can feel dense.
   Following the DDPM paper step by step, we build the forward noising process, the learned reverse process
   and the ELBO, and watch the training objective collapse into a plain squared error on the noise.
-date: 2025-05-01
+date: 2025-05-06
 tags: [Diffusion models, Generative AI, Deep Learning]
 ---
 

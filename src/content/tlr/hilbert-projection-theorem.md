@@ -5,7 +5,7 @@ abstract: >-
   Kriging looks like a clever weighted average of nearby samples, but underneath it sits one of the most
   elegant results of functional analysis. Every Kriging system is just an orthogonal projection, high-school
   vector geometry performed in the infinite-dimensional Hilbert space of random variables.
-date: 2022-08-15
+date: 2022-09-09
 tags: [Geostatistics, Kriging, Functional analysis]
 ---
 

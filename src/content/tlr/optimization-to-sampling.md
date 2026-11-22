@@ -4,7 +4,7 @@ abstract: >-
   Gradient descent is taught as an optimization method, Langevin dynamics and Hamiltonian Monte Carlo as
   sampling methods. Yet they share one structure: gradients, randomness and sometimes momentum, mixed in
   different proportions. Seeing them as a single family makes both worlds easier to understand.
-date: 2025-02-15
+date: 2025-02-28
 tags: [Sampling, Probabilistic AI, Deep Learning, Optimization]
 ---
 

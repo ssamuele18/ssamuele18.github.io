@@ -11,7 +11,7 @@ abstract: >-
   instantaneous component and a decaying one, examine how the timing of an order within the auction call
   changes the split between the two, and close with a methodological reminder that belongs on any empirical
   scientist's desk: a single elegant result, however persuasive, is not evidence until it has been tested.
-date: 2026-08-15
+date: 2026-07-28
 tags: [Market microstructure, Quant finance, Optimal execution, Statistical modelling, Closing auction]
 ---
 

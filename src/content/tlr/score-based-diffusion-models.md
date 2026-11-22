@@ -5,7 +5,7 @@ abstract: >-
   The same equations that describe particles drifting on a plane sit at the heart of modern generative AI.
   Taking DDPM to the continuous-time limit gives an Itô SDE; reversing it requires the score of the noisy
   data, which a neural network learns by denoising score matching, and sampling becomes solving an SDE.
-date: 2025-08-01
+date: 2025-08-30
 tags: [Diffusion models, SDEs, Generative AI]
 ---
 

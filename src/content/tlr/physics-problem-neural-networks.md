@@ -4,7 +4,7 @@ abstract: >-
   In 1696 Johann Bernoulli asked for the fastest slide between two points, and the answer was not the
   straight line. The brachistochrone trades distance for early speed, and that same idea, momentum and
   adaptivity over greedy steepest descent, is what makes modern neural-network optimizers work.
-date: 2025-08-15
+date: 2025-09-23
 tags: [Physics, Deep Learning, Theory]
 ---
 

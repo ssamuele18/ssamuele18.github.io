@@ -2,7 +2,7 @@
 title: "The Test Built to Be Failed"
 subtitle: "Humanity's Last Exam and the problem of benchmark saturation"
 abstract: "Every benchmark in AI eventually gets solved: scores climb, the gap between the best models shrinks to a rounding error, and the test stops telling you anything useful. Humanity's Last Exam is what happens when someone tries to build a test that survives its own success."
-date: 2026-09-15
+date: 2026-09-22
 tags: [Benchmarks, LLM, Evaluation]
 ---
 
